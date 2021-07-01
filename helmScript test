@@ -137,20 +137,18 @@ downloadFile() {
   HELM_DIST="helm-$TAG-$OS-$ARCH.tar.gz"
   DOWNLOAD_URL="https://get.helm.sh/$HELM_DIST"
   CHECKSUM_URL="$DOWNLOAD_URL.sha256"
-  HELM_TMP_ROOT="/tmp/helm-installer-ZRykyw"
+  HELM_TMP_ROOT="$(mktemp -dt helm-installer-XXXXXX)"
   HELM_TMP_FILE="$HELM_TMP_ROOT/$HELM_DIST"
   HELM_SUM_FILE="$HELM_TMP_ROOT/$HELM_DIST.sha256"
-  
+  echo "$(ls $HEMP_TMP_ROOT)"
   echo "Downloading $DOWNLOAD_URL"
-  # if [ "${HAS_CURL}" == "true" ]; then
-    # echo "asdflasjdflkj $CHECKSUM_URL $HELM_SUM_FILE LINE 146"
-    # curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
-    # echo "$CHECKSUM_URL $HELM_TMP_FILE LINE 146"
-    # curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
-  # elif [ "${HAS_WGET}" == "true" ]; then
-    # wget -q -O "$HELM_SUM_FILE" "$CHECKSUM_URL"
-    # wget -q -O "$HELM_TMP_FILE" "$DOWNLOAD_URL"
-  # fi
+  if [ "${HAS_CURL}" == "true" ]; then
+    curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
+    curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
+  elif [ "${HAS_WGET}" == "true" ]; then
+    wget -q -O "$HELM_SUM_FILE" "$CHECKSUM_URL"
+    wget -q -O "$HELM_TMP_FILE" "$DOWNLOAD_URL"
+  fi
 }
 
 # verifyFile verifies the SHA256 checksum of the binary package
@@ -196,7 +194,6 @@ verifySignatures() {
   local keys_filename="KEYS"
   local github_keys_url="https://raw.githubusercontent.com/helm/helm/main/${keys_filename}"
   if [ "${HAS_CURL}" == "true" ]; then
-    echo "Line 203"
     curl -SsL "${github_keys_url}" -o "${HELM_TMP_ROOT}/${keys_filename}"
   elif [ "${HAS_WGET}" == "true" ]; then
     wget -q -O "${HELM_TMP_ROOT}/${keys_filename}" "${github_keys_url}"
@@ -212,7 +209,6 @@ verifySignatures() {
   gpg --batch --no-default-keyring --keyring "${gpg_homedir}/${GPG_PUBRING}" --export > "${gpg_keyring}"
   local github_release_url="https://github.com/helm/helm/releases/download/${TAG}"
   if [ "${HAS_CURL}" == "true" ]; then
-    echo "LINE 219"
     curl -SsL "${github_release_url}/helm-${TAG}-${OS}-${ARCH}.tar.gz.sha256.asc" -o "${HELM_TMP_ROOT}/helm-${TAG}-${OS}-${ARCH}.tar.gz.sha256.asc"
     curl -SsL "${github_release_url}/helm-${TAG}-${OS}-${ARCH}.tar.gz.asc" -o "${HELM_TMP_ROOT}/helm-${TAG}-${OS}-${ARCH}.tar.gz.asc"
   elif [ "${HAS_WGET}" == "true" ]; then
