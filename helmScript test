@@ -142,15 +142,15 @@ downloadFile() {
   HELM_SUM_FILE="$HELM_TMP_ROOT/$HELM_DIST.sha256"
   
   echo "Downloading $DOWNLOAD_URL"
-  if [ "${HAS_CURL}" == "true" ]; then
-    echo "asdflasjdflkj $CHECKSUM_URL $HELM_SUM_FILE LINE 146"
-    curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
-    echo "$CHECKSUM_URL $HELM_TMP_FILE LINE 146"
-    curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
-  elif [ "${HAS_WGET}" == "true" ]; then
-    wget -q -O "$HELM_SUM_FILE" "$CHECKSUM_URL"
-    wget -q -O "$HELM_TMP_FILE" "$DOWNLOAD_URL"
-  fi
+  # if [ "${HAS_CURL}" == "true" ]; then
+    # echo "asdflasjdflkj $CHECKSUM_URL $HELM_SUM_FILE LINE 146"
+    # curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
+    # echo "$CHECKSUM_URL $HELM_TMP_FILE LINE 146"
+    # curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
+  # elif [ "${HAS_WGET}" == "true" ]; then
+    # wget -q -O "$HELM_SUM_FILE" "$CHECKSUM_URL"
+    # wget -q -O "$HELM_TMP_FILE" "$DOWNLOAD_URL"
+  # fi
 }
 
 # verifyFile verifies the SHA256 checksum of the binary package
