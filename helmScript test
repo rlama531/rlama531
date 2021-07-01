@@ -142,6 +142,7 @@ downloadFile() {
   HELM_SUM_FILE="$HELM_TMP_ROOT/$HELM_DIST.sha256"
   echo "Downloading $DOWNLOAD_URL"
   if [ "${HAS_CURL}" == "true" ]; then
+    echo " LALALALALA $CHECKSUM_URL $HELM_SUM_FILE LINE 146"
     curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
     echo "$CHECKSUM_URL $HELM_SUM_FILE LINE 146"
     curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
