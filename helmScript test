@@ -137,22 +137,19 @@ downloadFile() {
   HELM_DIST="helm-$TAG-$OS-$ARCH.tar.gz"
   DOWNLOAD_URL="https://get.helm.sh/$HELM_DIST"
   CHECKSUM_URL="$DOWNLOAD_URL.sha256"
-  HELM_TMP_ROOT="$(mktemp -dt helm-installer-XXXXXX)"
+  HELM_TMP_ROOT="/tmp/helm-installer-ZRykyw"
   HELM_TMP_FILE="$HELM_TMP_ROOT/$HELM_DIST"
   HELM_SUM_FILE="$HELM_TMP_ROOT/$HELM_DIST.sha256"
-  echo "$(ls $HELM_TMP_ROOT)"
+  
   echo "Downloading $DOWNLOAD_URL"
   if [ "${HAS_CURL}" == "true" ]; then
     echo "asdflasjdflkj $CHECKSUM_URL $HELM_SUM_FILE LINE 146"
     curl -SsL "$CHECKSUM_URL" -o "$HELM_SUM_FILE"
-    echo "$CHECKSUM_URL $HELM_SUM_FILE LINE 146"
+    echo "$CHECKSUM_URL $HELM_TMP_FILE LINE 146"
     curl -SsL "$DOWNLOAD_URL" -o "$HELM_TMP_FILE"
-    echo "$DOWNLOAD_URL -o $HELM_TMP_FILE 147"
   elif [ "${HAS_WGET}" == "true" ]; then
     wget -q -O "$HELM_SUM_FILE" "$CHECKSUM_URL"
-    echo "$HELM_SUM_FILE $CHECKSUM_URL 149"
     wget -q -O "$HELM_TMP_FILE" "$DOWNLOAD_URL"
-    echo "$HELM_TMP_FILE $DOWNLOAD_URL 150"
   fi
 }
 
